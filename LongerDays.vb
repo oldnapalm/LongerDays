@@ -32,6 +32,7 @@ Public Class TimeScaler
 
     Private NightStart As Integer = 22
     Private NightEnd As Integer = 7
+    Private SkipNight As Boolean = False
 
     Private lastMin As Integer = 0
     Private nowMin As Integer = 0
@@ -97,24 +98,30 @@ Public Class TimeScaler
 
         AddSecond(CSng(IngameSecondsPassed))
 
+        If SkipNight = True And h >= NightStart Then
+            GTA.Native.Function.Call(Native.Hash.SET_CLOCK_TIME, NightEnd, 0, 0)
+        End If
+
     End Sub
 
     Public Sub LoadSettings()
-        Dim val1, val2, val3, val4, val5 As String
+        Dim val1, val2, val3, val4, val5, val6 As String
         val1 = Settings.GetValue("SETTINGS", "TimeScaleDay", "0.5")
         val2 = Settings.GetValue("SETTINGS", "TimeScaleNight", "0.5")
         val3 = Settings.GetValue("SETTINGS", "NightStart", "22")
         val4 = Settings.GetValue("SETTINGS", "NightEnd", "6")
         val5 = Settings.GetValue("SETTINGS", "Debug", "0")
-
-        If TimeScaleDay < 0 Then TimeScaleDay = 0
-        If TimeScaleNight < 0 Then TimeScaleNight = 0
+        val6 = Settings.GetValue("SETTINGS", "SkipNight", "0")
 
         TimeScaleDay = CSng(val1)
         TimeScaleNight = CSng(val2)
         NightStart = CInt(val3)
         NightEnd = CInt(val4)
         DebugMode = CBool(val5)
+        SkipNight = CBool(val6)
+
+        If TimeScaleDay < 0 Then TimeScaleDay = 0
+        If TimeScaleNight < 0 Then TimeScaleNight = 0
 
         areSettingsLoaded = True
     End Sub
