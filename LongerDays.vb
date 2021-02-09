@@ -7,6 +7,7 @@ Imports System.Drawing
 Imports System.Windows.Forms
 Imports System.Threading.Tasks
 Imports System.Collections.Generic
+Imports System.Globalization
 
 
 Public Module GlobalInfo
@@ -113,15 +114,16 @@ Public Class TimeScaler
         val5 = Settings.GetValue("SETTINGS", "Debug", "0")
         val6 = Settings.GetValue("SETTINGS", "SkipNight", "0")
 
-        TimeScaleDay = CSng(val1)
-        TimeScaleNight = CSng(val2)
+        Dim usCulture = new CultureInfo("en-US")
+        TimeScaleDay = Double.Parse(val1, usCulture)
+        TimeScaleNight = Double.Parse(val2, usCulture)
         NightStart = CInt(val3)
         NightEnd = CInt(val4)
         DebugMode = CBool(val5)
         SkipNight = CBool(val6)
 
-        If TimeScaleDay < 0 Then TimeScaleDay = 0
-        If TimeScaleNight < 0 Then TimeScaleNight = 0
+        If TimeScaleDay < 0 Then TimeScaleDay = 1
+        If TimeScaleNight < 0 Then TimeScaleNight = 1
 
         areSettingsLoaded = True
     End Sub
